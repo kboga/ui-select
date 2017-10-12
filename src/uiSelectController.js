@@ -379,7 +379,7 @@ uis.controller('uiSelectCtrl',
 
 
   // When the user selects an item with ENTER or clicks the dropdown
-  ctrl.select = function(item, skipFocusser, $event) {
+  ctrl.select = function(item, skipFocusser, $event, isClear) {
     if (item === undefined || !_isItemDisabled(item)) {
 
       if ( ! ctrl.items && ! ctrl.search && ! ctrl.tagging.isActivated) return;
@@ -390,7 +390,7 @@ uis.controller('uiSelectCtrl',
         if($event && ($event.type === 'click' || $event.type === 'touchend') && item)
           ctrl.clickTriggeredSelect = true;
 
-        if(ctrl.tagging.isActivated && ctrl.clickTriggeredSelect === false) {
+        if(!isClear && ctrl.tagging.isActivated && ctrl.clickTriggeredSelect === false) {
           // if taggingLabel is disabled and item is undefined we pull from ctrl.search
           if ( ctrl.taggingLabel === false ) {
             if ( ctrl.activeIndex < 0 ) {
@@ -455,7 +455,7 @@ uis.controller('uiSelectCtrl',
   };
 
   ctrl.clear = function($event) {
-    ctrl.select(undefined);
+    ctrl.select(undefined, undefined, undefined, true);
     $event.stopPropagation();
     $timeout(function() {
       ctrl.focusser[0].focus();
